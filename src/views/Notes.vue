@@ -1,13 +1,20 @@
 <template>
     <div>
         <h1>anotações</h1>
-        <div>
-            <p v-if="notations">
+        <div v-if="notations">
+            <p>
                 tem anotações
             </p>
-            <p v-else>
-                não tem anotações
+        </div>
+        <div v-else>
+            <p>
+                Sem anotações ainda
             </p>
+            <router-link 
+            class="btn btn-primary"
+            to="/newnote">
+            Nova anotação
+            </router-link>
         </div>
     </div>
 </template>

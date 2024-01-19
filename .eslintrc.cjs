@@ -33,6 +33,13 @@ module.exports = {
     ],
     "rules": {
         "vue/multi-word-component-names":0,
-        "vue/html-indent":0
+        "vue/html-indent":0,
+        "vue/html-self-closing":0,
+        "vue/attributes-order":0,
+        "vue/no-multi-spaces":0,
+        "vue/max-attributes-per-line":0,
+        "vue/html-closing-bracket-newline":0,
+        "vue/no-template-shadow":0,
+        "vue/first-attribute-linebreak":0
     }
 }
