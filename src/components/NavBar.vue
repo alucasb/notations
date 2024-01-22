@@ -11,20 +11,15 @@
             <router-link class="nav-link active" to="/">Home</router-link>
         </li>
         <li class="nav-item">
-            
             <router-link class="nav-link active" to="/notes">Anotações</router-link>
         </li>
         <li class="nav-item">
             <router-link class="nav-link active" to="/newnote">Nova anotação</router-link>
         </li>
-        <li class="nav-item">
-            <router-link class="nav-link active" to="/note/10">id de teste de anotação</router-link>
-        </li>
         </ul>
     </div>
     </div>
     </nav>
-    
     </div>
 </template>
 <script lang="ts">

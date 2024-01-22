@@ -21,6 +21,7 @@
                     <div>
                         <input type="number"
                         id="money"
+                        required
                         class="form-control"
                         v-model="money"
                         placeholder="R$">
@@ -32,6 +33,7 @@
                             <select
                             class="form-control"
                             id="category"
+                            required
                             v-model="category">
                                 <option value="">
                                     Selecione uma categoria
@@ -40,7 +42,7 @@
                                 v-for="category in categories"
                                 :key="category"
                                 :value="category">
-                                {{ category}}
+                                {{ category }}
                             </option>
                             </select>
                     </div>
@@ -50,6 +52,7 @@
                     
                     <div id="date-input">
                     <input
+                    required
                     class="form-control"
                     type="date"
                     id="date"
@@ -58,12 +61,7 @@
                 </div>
                 <div id="buttons">
                         <div>
-                            <button id="delete" class="btn btn-danger">
-                                <font-awesome-icon icon="fa-solid fa-trash" />
-                            </button>
-                        </div>
-                        <div>
-                            <button id="save"  class="btn btn-primary" type="submit">
+                            <button id="save" class="btn btn-primary" type="submit">
                             Salvar
                             </button>
                         </div>
@@ -92,28 +90,25 @@ export default {
     },
     methods:{
         async sendForm(){
-            try {
-            const res = await fetch('http://localhost:3000/#/newnote', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    note: this.note,
-                    money: this.money,
-                    category: this.category,
-                    date: this.date
-                })
-            })
-            const result = await res.json();
-            console.log(result);
-            this.note = '';
-            this.money = '';
-            this.category = [];
-            this.date = '';
-            } catch (error) {
-                console.log(error)
+            const data = {
+                note: this.note,
+                money: this.money,
+                category: this.category,
+                date: this.date,
             }
+            const dataJson = JSON.stringify(data)
+            
+            const req = await fetch('http://localhost:3000/notes', {
+                method: 'POST',
+                headers: {"Content-Type": "application/json"},
+                body: dataJson
+            })
+            const res = await req.json()
+            this.$router.push('/notes');
+            this.note = ''
+            this.money = ''
+            this.category = []
+            this.date = ''
             }
         },
     }
