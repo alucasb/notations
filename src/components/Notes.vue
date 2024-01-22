@@ -1,56 +1,76 @@
 <template>
-        <div>
-            <h1 id="title" class="display-2">
+        <div id="notesContainer">
+            <h2 id="titleNote" class="display-2">
                 Suas anotações
-            </h1>
-            <div v-if="notes">
+            </h2>
+            <div v-if="notes && notes.length == 0">
+                <div id="noNotes">
+                    <p>
+                        Sem anotações ainda
+                    </p>
+                    <router-link
+                    id="linkToNewNote"
+                    class="btn btn-primary"
+                    to="/newnote">
+                    Nova anotação
+                    </router-link>
+                </div>
             </div>
-            <div v-else>
-                <p>
-                    Sem anotações ainda
-                </p>
-                <router-link
-                id="linkToNewNote"
-                class="btn btn-primary"
-                to="/newnote">
-                Nova anotação
-                </router-link>
-            </div>
-            <div id="notes">
+            <div id="notes" v-else>
                 <div id="notes-rows">
                     <div class="note-row" v-for="note in notes" :key="note.id">
-                        <div :class="{ 'long-title': note.note.length > 20 }">{{ note.note}}</div>
+                        <div :class="{ 'long-title': note.note.length > 4 }">
+                            {{ note.note }}
+                        </div>
                         
-                        <div v-if="note.money">Valor: {{ note.money}}</div>
-                        <div v-else>Sem valor</div>
+                        <div v-if="note.money">Valor: {{ note.money }}</div>
+                        <div v-else>
+                            Sem valor
+                        </div>
                         <div>{{ note.category }}</div>
-                        <div v-if="note.date">{{ note.date }}</div>
-                        <div v-else>Sem data</div>
+                        <div v-if="note.date">
+                            {{ formatDate(note.date) }}
+                        </div>
+                        <div v-else>
+                            Sem data
+                        </div>
                         <div>
-                            <button @click="deleteNote(note.id)" id="cancel" class="btn btn-danger">
+                            <button @click="showConfirm = true" id="cancel" class="btn btn-danger">
                                 <font-awesome-icon icon="fa-solid fa-trash" />
                             </button>
-                            <button @click="accessNote(note.id)" class="btn btn-primary">
-                                acessar
-                            </button>
+                                <router-link
+                                :to="{ name: 'note', params: { id: note.id}}"
+                                class="btn btn-primary"
+                                >
+                                    Acessar
+                                </router-link>
                         </div>
+                        <confirmation :show-modal="showConfirm" @confirmed="deleteNote(note.id)" @canceled="cancelDelete"></confirmation>
                     </div>
                 </div>
             </div>
         </div>
 </template>
 <script lang="ts">
+import moment from 'moment'
+import Confirmation from './Confirmation.vue';
 
 export default {
     name: 'Notes',
+    components: {
+        Confirmation
+    },
     data() {
         return {
+            notesLength: false,
             notes: null,
             notation_id: null,
-            category: []
+            category: [],
+            showConfirm: false
         };
     },
     mounted() {
+        
         this.getNotes();
     },
     methods: {
@@ -59,18 +79,24 @@ export default {
             const data = await req.json();
             this.notes = data;
         },
-        accessNote(id) {
-
-        },
         async deleteNote(id){
             const req = await fetch(`http://localhost:3000/notes/${id}`, {
                 method: "DELETE"
             })
             const res = await req.json()
-            
+            this.showConfirm = false;
             this.getNotes()
-        }
+        },
+        formatDate(date){
+        return moment(date).format('DD/MM/YYYY');
     },
+        showDeleteConfirmation(){
+            this.showConfirm = true;
+        },
+        cancelDelete() {
+            this.showConfirm = false;
+        }
+}
 }
 </script>
 <style scoped>
@@ -80,7 +106,7 @@ export default {
         padding: 8px 30px;
         margin-top: 10px;
     }
-    #title{
+    #titleNote{
         margin-top: 20px;
         text-align: center;
         font-size: 3.8rem;
@@ -91,7 +117,7 @@ export default {
     }
     #notes-rows,
     .note-row{
-        display: flex; /* Torna o contêiner um contêiner flexível */
+        display: flex; 
         justify-content: space-between;
         flex-wrap: wrap;
         margin-top: 10px;
@@ -109,7 +135,11 @@ export default {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    max-width: 100px; /* ou qualquer valor que você preferir */
+    max-width: 40px; 
     display: inline-block;
+}
+#noNotes{
+    margin-top: 80px;
+    text-align: center;
 }
 </style>
