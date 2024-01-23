@@ -1,5 +1,4 @@
-# Notations App
-A tech challenge for a job application 
+# Notations App 
 The tests for the application were made on each input before the submit to the database for guarantee the succes and correct shipping of the data, using non real input data for the seccurity
 On this repository the database will be empty for the localusage 
 ### How to use:
