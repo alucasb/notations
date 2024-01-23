@@ -1,6 +1,6 @@
 # Notations App 
 The tests for the application were made on each input before the submit to the database for guarantee the succes and correct shipping of the data, using non real input data for the seccurity
-On this repository the database will be empty for the localusage 
+On this repository the database will be empty for the local usage 
 ### How to use:
 Open the terminal and Clone the repository 
 ```sh
